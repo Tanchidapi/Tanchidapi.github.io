@@ -1,0 +1,47 @@
+---
+layout: page
+---
+
+{% assign categories = site.categories | sort_natural %}
+<style>
+  .category-browser { display: grid; gap: 0.5rem; }
+  .category-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--main-border-color); }
+  .category-row details { min-width: 0; }
+  .category-row summary { display: flex; align-items: center; gap: 0.6rem; min-height: 2rem; cursor: pointer; list-style: none; }
+  .category-row summary::-webkit-details-marker { display: none; }
+  .category-row summary::before { content: ""; width: 0; height: 0; flex: 0 0 auto; border-top: 0.3rem solid transparent; border-bottom: 0.3rem solid transparent; border-left: 0.4rem solid currentColor; transition: transform 150ms ease; }
+  .category-row details[open] summary::before { transform: rotate(90deg); }
+  .category-count { color: var(--text-muted-color); font-size: 0.9em; }
+  .category-articles { margin: 0.35rem 0 0 1rem; padding-left: 1.1rem; }
+  .category-articles li { padding: 0.25rem 0; }
+  .category-articles time { margin-left: 0.5rem; color: var(--text-muted-color); font-size: 0.85em; }
+  .category-archive-link { align-self: center; white-space: nowrap; }
+  @media (max-width: 480px) {
+    .category-row { gap: 0.5rem; }
+    .category-archive-link { font-size: 0.85em; }
+  }
+</style>
+
+<div class="category-browser">
+  {% for category in categories %}
+    {% assign category_name = category | first %}
+    {% assign category_posts = category | last | sort: 'date' | reverse %}
+    <div class="category-row">
+      <details>
+        <summary>
+          <span>{{ category_name }}</span>
+          <span class="category-count">{{ category_posts.size }}</span>
+        </summary>
+        <ul class="category-articles">
+          {% for post in category_posts %}
+            <li>
+              <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+              <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y-%m-%d' }}</time>
+            </li>
+          {% endfor %}
+        </ul>
+      </details>
+      <a class="category-archive-link" href="{{ category_name | uri_escape | prepend: '/categories/' | append: '/' | relative_url }}">进入分类</a>
+    </div>
+  {% endfor %}
+</div>
