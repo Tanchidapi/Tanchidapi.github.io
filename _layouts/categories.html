@@ -2,7 +2,6 @@
 layout: page
 ---
 
-{% assign categories = site.categories | sort_natural %}
 <style>
   .category-browser { display: grid; gap: 0.5rem; }
   .category-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--main-border-color); }
@@ -23,25 +22,29 @@ layout: page
 </style>
 
 <div class="category-browser">
-  {% for category in categories %}
-    {% assign category_name = category | first %}
-    {% assign category_posts = category | last | sort: 'date' | reverse %}
-    <div class="category-row">
-      <details>
-        <summary>
-          <span>{{ category_name }}</span>
-          <span class="category-count">{{ category_posts.size }}</span>
-        </summary>
-        <ul class="category-articles">
-          {% for post in category_posts %}
-            <li>
-              <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-              <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y-%m-%d' }}</time>
-            </li>
-          {% endfor %}
-        </ul>
-      </details>
-      <a class="category-archive-link" href="{{ category_name | uri_escape | prepend: '/categories/' | append: '/' | relative_url }}">进入分类</a>
-    </div>
-  {% endfor %}
+  {% if site.categories %}
+    {% for category in site.categories %}
+      {% assign category_name = category | first %}
+      {% assign category_posts = category | last %}
+      {% if category_posts %}
+        <div class="category-row">
+          <details>
+            <summary>
+              <span>{{ category_name }}</span>
+              <span class="category-count">{{ category_posts.size }}</span>
+            </summary>
+            <ul class="category-articles">
+              {% for post in category_posts %}
+                <li>
+                  <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                  <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y-%m-%d' }}</time>
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+          <a class="category-archive-link" href="{{ category_name | uri_escape | prepend: '/categories/' | append: '/' | relative_url }}">进入分类</a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 </div>
