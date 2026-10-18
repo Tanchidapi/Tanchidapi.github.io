@@ -22,10 +22,10 @@ layout: page
 </style>
 
 <div class="category-browser">
-  {% if site.categories %}
-    {% for category in site.categories %}
-      {% assign category_name = category | first %}
-      {% assign category_posts = category | last %}
+  {% if site.data.category_index %}
+    {% for category in site.data.category_index %}
+      {% assign category_name = category.name %}
+      {% assign category_posts = category.posts %}
       {% if category_posts %}
         <div class="category-row">
           <details>
