@@ -42,7 +42,8 @@ layout: page
               {% endfor %}
             </ul>
           </details>
-          <a class="category-archive-link" href="{{ category_name | uri_escape | prepend: '/categories/' | append: '/' | relative_url }}">进入分类</a>
+          {% assign category_slug = category_name | replace: '.', '-' | slugify %}
+          <a class="category-archive-link" href="{{ category_slug | prepend: '/categories/' | append: '/' | relative_url }}">进入分类</a>
         </div>
       {% endif %}
     {% endfor %}
